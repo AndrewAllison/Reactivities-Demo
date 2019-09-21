@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Header, Icon, List } from 'semantic-ui-react';
 import './App.css';
 import axios from 'axios';
 
@@ -10,7 +11,6 @@ class App extends Component {
     axios
       .get('https://localhost:5001/api/values')
       .then(response => {
-        console.log(response);
         this.setState({
           values: response.data
         });
@@ -19,13 +19,16 @@ class App extends Component {
   }
   render() {
     return (
-      <div className='app'>
-        <h1>Hellow</h1>
-        <ul>
+      <div>
+        <Header as='h2'>
+          <Icon name='users' />
+          <Header.Content>Reactivities</Header.Content>
+        </Header>
+        <List>
           {this.state.values.map((value: any) => (
-            <li key={value.id}>{value.name}</li>
+            <List.Item key={value.id}>{value.name}</List.Item>
           ))}
-        </ul>
+        </List>
       </div>
     );
   }
