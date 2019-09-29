@@ -1,37 +1,57 @@
-import React, { useState, FormEvent, useContext } from 'react';
+import React, { useState, FormEvent, useContext, useEffect } from 'react';
 import { Segment, Form, Button } from 'semantic-ui-react';
 import { IActivity } from '../../models/activity';
 import { v4 as uuid } from 'uuid';
 import { observer } from 'mobx-react-lite';
 import ActivityStore from '../../stores/activityStore';
-
-interface IProps {
-  activity: IActivity | undefined;
+import { RouteComponentProps } from 'react-router';
+interface DetailParams {
+  id: string;
 }
 
-const ActivityForm: React.FC<IProps> = ({
-  activity: initialFormState,
+const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
+  match,
+  history
 }) => {
   const activityContext = useContext(ActivityStore);
-  const { createActivity, editActivity, submitting, setEditMode } = activityContext;
+  const {
+    createActivity,
+    editActivity,
+    submitting,
+    activity: initialFormState,
+    loadActivity,
+    clearActivity
+  } = activityContext;
 
-  const initializeForm = () => {
-    if (initialFormState) {
-      return initialFormState;
-    } else {
-      return {
-        id: '',
-        title: '',
-        category: '',
-        description: '',
-        date: '',
-        city: '',
-        venue: ''
-      };
+  const [activity, setActivity] = useState<IActivity>({
+    id: '',
+    title: '',
+    category: '',
+    description: '',
+    date: '',
+    city: '',
+    venue: ''
+  });
+
+  useEffect(() => {
+    const { id } = match.params;
+    // using activity.id.length stops memory leaks
+    if (id && activity.id.length === 0) {
+      loadActivity(id).then(
+        () => initialFormState && setActivity(initialFormState)
+      );
     }
-  };
-
-  const [activity, setActivity] = useState<IActivity>(initializeForm);
+    return () => {
+      clearActivity();
+    };
+  }, [
+    loadActivity,
+    clearActivity,
+    match.params,
+    match.params.id,
+    initialFormState,
+    activity.id.length
+  ]);
 
   const handleSubmit = () => {
     if (activity.id.length === 0) {
@@ -39,9 +59,13 @@ const ActivityForm: React.FC<IProps> = ({
         ...activity,
         id: uuid()
       };
-      createActivity(newActivity);
+      createActivity(newActivity).then(() =>
+        history.push(`/activities/${newActivity.id}`)
+      );
     } else {
-      editActivity(activity);
+      editActivity(activity).then(() =>
+        history.push(`/activities/${activity.id}`)
+      );
     }
   };
 
@@ -102,7 +126,7 @@ const ActivityForm: React.FC<IProps> = ({
           content='SUBMIT'
         />
         <Button
-          onClick={() => setEditMode(false)}
+          onClick={() => history.push('/activities')}
           floated='right'
           type='button'
           content='Cancel'
