@@ -15,6 +15,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Sqlite;
+using FluentValidation.AspNetCore;
+using API.Middleware;
 
 namespace API
 {
@@ -43,15 +45,18 @@ namespace API
             });
       });
       services.AddMediatR(typeof(List.Handler).Assembly);
-      services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+      services.AddMvc()
+      .AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<Create>())
+      .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app, IHostingEnvironment env)
     {
+      app.UseMiddleware<ErrorHandlingMiddleware>();
       if (env.IsDevelopment())
       {
-        app.UseDeveloperExceptionPage();
+        // app.UseDeveloperExceptionPage();
       }
       else
       {

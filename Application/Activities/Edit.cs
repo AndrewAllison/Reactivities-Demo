@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Persistence;
@@ -19,6 +20,20 @@ namespace Application.Activities
       public string City { get; set; }
       public string Venue { get; set; }
     }
+    
+    public class CommandValidator : AbstractValidator<Command>
+    {
+      public CommandValidator()
+      {
+        RuleFor(a => a.Title).NotEmpty();
+        RuleFor(a => a.Description).NotEmpty();
+        RuleFor(a => a.Category).NotEmpty();
+        RuleFor(a => a.Date).NotEmpty();
+        RuleFor(a => a.City).NotEmpty();
+        RuleFor(a => a.Venue).NotEmpty();
+      }
+    }
+
     public class Handler : IRequestHandler<Command>
     {
       private readonly DataContext _context;

@@ -7,70 +7,39 @@ import LoadingComponent from '../../layout/LoadingComponent';
 import ActivityDetailedHeader from './ActivityDetailedHeader';
 import ActivityDetailedInfo from './ActivityDetailedInfo';
 import ActivityDetailedChat from './ActivityDetailedChat';
-import ActivityDetailedSidebar from './ActivityDetailedSIdebar';
+import ActivityDetailedSidebar from './ActivityDetailedSidebar';
 
 interface DetailParams {
-  id: string;
+    id: string;
 }
 
 const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({
-  match,
-  history
+    match,
+    history
 }) => {
-  const activityStore = useContext(ActivityStore);
-  const { activity, loadActivity } = activityStore;
+    const activityStore = useContext(ActivityStore);
+    const { activity, loadActivity } = activityStore;
 
-  useEffect(() => {
-    loadActivity(match.params.id);
-  }, [loadActivity, match.params.id]);
+    useEffect(() => {
+        loadActivity(match.params.id);
+    }, [loadActivity, match.params.id]);
 
-  if (!activity) {
-    return <LoadingComponent content='Loading Activity' />;
-  }
+    if (!activity) {
+        return <LoadingComponent content='Loading Activity' />;
+    }
 
-  return (
-    <Grid>
-      <Grid.Column width={10}>
-        <ActivityDetailedHeader activity={activity} />
-        <ActivityDetailedInfo activity={activity} />
-        <ActivityDetailedChat />
-      </Grid.Column>
-      <Grid.Column width={6}>
-        <ActivityDetailedSidebar />
-      </Grid.Column>
-    </Grid>
-    // <Card fluid>
-    //   <Image
-    //     src={`/assets/categoryImages/${activity!.category}.jpg`}
-    //     wrapped
-    //     ui={false}
-    //   />
-    //   <Card.Content>
-    //     <Card.Header>{activity!.title}</Card.Header>
-    //     <Card.Meta>
-    //       <span className='date'>{activity!.date}</span>
-    //     </Card.Meta>
-    //     <Card.Description>Description</Card.Description>
-    //   </Card.Content>
-    //   <Card.Content extra>
-    //     <Button.Group widths={2}>
-    //       <Button
-    //         as={Link}
-    //         to={`/manage/${activity.id}`}
-    //         basic
-    //         color='blue'
-    //         content='Edit'
-    //       />
-    //       <Button
-    //         onClick={() => history.push('/activities')}
-    //         basic
-    //         color='grey'
-    //         content='Cancel'
-    //       />
-    //     </Button.Group>
-    //   </Card.Content>
-    // </Card>
-  );
+    return (
+        <Grid>
+            <Grid.Column width={10}>
+                <ActivityDetailedHeader activity={activity} />
+                <ActivityDetailedInfo activity={activity} />
+                <ActivityDetailedChat />
+            </Grid.Column>
+            <Grid.Column width={6}>
+                <ActivityDetailedSidebar />
+            </Grid.Column>
+        </Grid>
+    );
 };
 
 export default observer(ActivityDetails);
