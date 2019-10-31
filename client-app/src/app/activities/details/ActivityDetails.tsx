@@ -1,31 +1,30 @@
-import React, { useContext, useEffect } from 'react';
-import { Grid } from 'semantic-ui-react';
-import ActivityStore from '../../stores/activityStore';
-import { observer } from 'mobx-react-lite';
-import { RouteComponentProps } from 'react-router';
-import LoadingComponent from '../../layout/LoadingComponent';
-import ActivityDetailedHeader from './ActivityDetailedHeader';
-import ActivityDetailedInfo from './ActivityDetailedInfo';
-import ActivityDetailedChat from './ActivityDetailedChat';
-import ActivityDetailedSidebar from './ActivityDetailedSidebar';
+import React, { useContext, useEffect } from 'react'
+import { Grid } from 'semantic-ui-react'
+import ActivityStore from '../../stores/activityStore'
+import { observer } from 'mobx-react-lite'
+import { RouteComponentProps } from 'react-router'
+import LoadingComponent from '../../layout/LoadingComponent'
+import ActivityDetailedHeader from './ActivityDetailedHeader'
+import ActivityDetailedInfo from './ActivityDetailedInfo'
+import ActivityDetailedChat from './ActivityDetailedChat'
+import ActivityDetailedSidebar from './ActivityDetailedSidebar'
 
 interface DetailParams {
-    id: string;
+    id: string
 }
 
 const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({
     match,
-    history
 }) => {
-    const activityStore = useContext(ActivityStore);
-    const { activity, loadActivity } = activityStore;
+    const activityStore = useContext(ActivityStore)
+    const { activity, loadActivity } = activityStore
 
     useEffect(() => {
-        loadActivity(match.params.id);
-    }, [loadActivity, match.params.id]);
+        loadActivity(match.params.id)
+    }, [loadActivity, match.params.id])
 
     if (!activity) {
-        return <LoadingComponent content='Loading Activity' />;
+        return <LoadingComponent content="Loading Activity" />
     }
 
     return (
@@ -39,7 +38,7 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({
                 <ActivityDetailedSidebar />
             </Grid.Column>
         </Grid>
-    );
-};
+    )
+}
 
-export default observer(ActivityDetails);
+export default observer(ActivityDetails)
