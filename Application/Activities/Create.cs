@@ -1,4 +1,3 @@
-using Domain;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Persistence;
@@ -6,6 +5,8 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
+using Domain;
+
 namespace Application.Activities
 {
   public class Create

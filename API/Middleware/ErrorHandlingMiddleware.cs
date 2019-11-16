@@ -2,9 +2,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Net;
-using Newtonsoft.Json;
 using System.Threading.Tasks;
 using Application.Errors;
+using Newtonsoft.Json;
 
 namespace API.Middleware
 {
